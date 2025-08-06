@@ -8,10 +8,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Lightbulb, Users, Building2, Truck, Package, Settings } from "lucide-react";
+import { Lightbulb, Users, Building2, Truck, Package, Settings, Brain } from "lucide-react";
 
 interface IdeaSubmissionFormProps {
   onClose: () => void;
+  onBrainstorm: (category: string, categoryLabel: string) => void;
 }
 
 const categories = [
@@ -23,7 +24,7 @@ const categories = [
   { value: "other_scm", label: "Other SCM", icon: Lightbulb, description: "Other supply chain technologies" },
 ];
 
-const IdeaSubmissionForm = ({ onClose }: IdeaSubmissionFormProps) => {
+const IdeaSubmissionForm = ({ onClose, onBrainstorm }: IdeaSubmissionFormProps) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -201,6 +202,21 @@ const IdeaSubmissionForm = ({ onClose }: IdeaSubmissionFormProps) => {
               >
                 Cancel
               </Button>
+              {formData.category && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    const selectedCategory = categories.find(c => c.value === formData.category);
+                    onBrainstorm(formData.category, selectedCategory?.label || "Unknown");
+                  }}
+                  className="flex-1"
+                  disabled={isSubmitting}
+                >
+                  <Brain className="w-4 h-4 mr-2" />
+                  Brainstorm with AI
+                </Button>
+              )}
               <Button
                 type="submit"
                 className="flex-1 bg-gradient-to-r from-primary to-innovation"
