@@ -26,17 +26,17 @@ class LocalAIBrainstorming implements BrainstormingService {
       this.isInitialized = true;
       console.log("Local AI model initialized successfully");
     } catch (error) {
-      console.warn("WebGPU not available, falling back to CPU...");
+      console.warn("WebGPU not available, falling back to WASM...");
       try {
         this.textGenerator = await pipeline(
           "text-generation",
           "onnx-community/Qwen2.5-0.5B-Instruct",
-          { device: "cpu" }
+          { device: "wasm" }
         );
         this.isInitialized = true;
-        console.log("Local AI model initialized on CPU");
-      } catch (cpuError) {
-        console.error("Failed to initialize AI model:", cpuError);
+        console.log("Local AI model initialized on WASM");
+      } catch (wasmError) {
+        console.error("Failed to initialize AI model:", wasmError);
         throw new Error("Unable to initialize local AI model");
       }
     }
