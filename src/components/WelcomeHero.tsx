@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Brain, Lightbulb, Users, TrendingUp } from "lucide-react";
 import heroImage from "@/assets/innovation-hero.jpg";
+import BestIdeaDisplay from "@/components/BestIdeaDisplay";
 
 interface WelcomeHeroProps {
   onGetStarted: () => void;
@@ -60,6 +61,8 @@ const WelcomeHero = ({ onGetStarted }: WelcomeHeroProps) => {
           >
             Submit Your Idea
           </Button>
+          
+          <BestIdeaDisplay />
           
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">

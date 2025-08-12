@@ -3,6 +3,7 @@ import WelcomeHero from "@/components/WelcomeHero";
 import IdeaSubmissionForm from "@/components/IdeaSubmissionForm";
 import AnalyticsDashboard from "@/components/AnalyticsDashboard";
 import AIBrainstorming from "@/components/AIBrainstorming";
+import BestIdeaDisplay from "@/components/BestIdeaDisplay";
 
 type ViewState = "hero" | "submission" | "brainstorming";
 
