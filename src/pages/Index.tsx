@@ -4,8 +4,10 @@ import IdeaSubmissionForm from "@/components/IdeaSubmissionForm";
 import AnalyticsDashboard from "@/components/AnalyticsDashboard";
 import AIBrainstorming from "@/components/AIBrainstorming";
 import BestIdeaDisplay from "@/components/BestIdeaDisplay";
+import SCMAIAssistant from "@/components/SCMAIAssistant";
+import KnowledgeBase from "@/components/KnowledgeBase";
 
-type ViewState = "hero" | "submission" | "brainstorming";
+type ViewState = "hero" | "submission" | "brainstorming" | "scm-ai" | "knowledge-base";
 
 interface BrainstormingState {
   category: string;
@@ -31,7 +33,11 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       {currentView === "hero" && (
         <>
-          <WelcomeHero onGetStarted={() => setCurrentView("submission")} />
+          <WelcomeHero 
+            onGetStarted={() => setCurrentView("submission")} 
+            onLearnSCM={() => setCurrentView("scm-ai")}
+            onKnowledgeBase={() => setCurrentView("knowledge-base")}
+          />
           <AnalyticsDashboard />
         </>
       )}
@@ -50,6 +56,14 @@ const Index = () => {
           onBack={() => setCurrentView("submission")}
           onSaveIdea={handleSaveIdea}
         />
+      )}
+
+      {currentView === "scm-ai" && (
+        <SCMAIAssistant onBack={() => setCurrentView("hero")} />
+      )}
+
+      {currentView === "knowledge-base" && (
+        <KnowledgeBase onBack={() => setCurrentView("hero")} />
       )}
     </div>
   );

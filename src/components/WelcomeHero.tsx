@@ -1,13 +1,56 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Brain, Lightbulb, Users, TrendingUp } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Brain, Lightbulb, Users, TrendingUp, FileText } from "lucide-react";
 import heroImage from "@/assets/innovation-hero.jpg";
-import BestIdeaDisplay from "@/components/BestIdeaDisplay";
+import BestIdeaDisplay from "./BestIdeaDisplay";
+import { supabase } from "@/integrations/supabase/client";
 
 interface WelcomeHeroProps {
   onGetStarted: () => void;
+  onLearnSCM: () => void;
+  onKnowledgeBase: () => void;
 }
 
-const WelcomeHero = ({ onGetStarted }: WelcomeHeroProps) => {
+const WelcomeHero = ({ onGetStarted, onLearnSCM, onKnowledgeBase }: WelcomeHeroProps) => {
+  const [visitorCount, setVisitorCount] = useState<number>(0);
+  const [articleCount, setArticleCount] = useState<number>(0);
+
+  useEffect(() => {
+    const incrementVisitorCount = async () => {
+      try {
+        const { data, error } = await supabase.rpc('increment_visitor_count');
+        if (error) {
+          console.error('Error incrementing visitor count:', error);
+        } else {
+          setVisitorCount(data || 0);
+        }
+      } catch (error) {
+        console.error('Error calling increment_visitor_count:', error);
+      }
+    };
+
+    const fetchArticleCount = async () => {
+      try {
+        const { count, error } = await supabase
+          .from('articles')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'published');
+        
+        if (error) {
+          console.error('Error fetching article count:', error);
+        } else {
+          setArticleCount(count || 0);
+        }
+      } catch (error) {
+        console.error('Error fetching article count:', error);
+      }
+    };
+
+    incrementVisitorCount();
+    fetchArticleCount();
+  }, []);
+
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
@@ -26,7 +69,7 @@ const WelcomeHero = ({ onGetStarted }: WelcomeHeroProps) => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
+      <div className="relative z-10 text-center max-w-6xl mx-auto px-6">
         <div className="mb-8 flex justify-center">
           <div className="relative">
             <Brain className="w-16 h-16 text-primary animate-pulse" />
@@ -53,7 +96,7 @@ const WelcomeHero = ({ onGetStarted }: WelcomeHeroProps) => {
           <span className="text-innovation font-semibold"> Supply Chain Management</span> and beyond.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
+        <div className="flex flex-col lg:flex-row gap-8 justify-center items-center mb-12">
           <div className="relative">
             <Button 
               onClick={onGetStarted}
@@ -70,19 +113,36 @@ const WelcomeHero = ({ onGetStarted }: WelcomeHeroProps) => {
               <span className="text-lg">✨</span>
             </div>
           </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 items-center">
+            <div className="flex items-center gap-2">
+              <Button 
+                onClick={onLearnSCM}
+                size="lg"
+                variant="outline"
+                className="px-6 py-4 text-lg font-semibold border-2 border-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300"
+              >
+                <Brain className="w-5 h-5 mr-2" />
+                Learn SCM
+              </Button>
+              <Badge variant="secondary" className="text-sm">
+                <FileText className="w-3 h-3 mr-1" />
+                {articleCount} articles
+              </Badge>
+            </div>
+            
+            <Button 
+              onClick={onKnowledgeBase}
+              size="lg"
+              variant="secondary"
+              className="px-6 py-4 text-lg font-semibold hover:shadow-lg transition-all duration-300"
+            >
+              <FileText className="w-5 h-5 mr-2" />
+              Knowledge Base
+            </Button>
+          </div>
           
           <BestIdeaDisplay />
-          
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4" />
-              <span>Join thousands of innovators</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4" />
-              <span>Daily new ideas</span>
-            </div>
-          </div>
         </div>
 
         {/* Stats */}
@@ -92,7 +152,7 @@ const WelcomeHero = ({ onGetStarted }: WelcomeHeroProps) => {
             <div className="text-sm text-muted-foreground">Ideas Generated</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-innovation mb-2">50+</div>
+            <div className="text-3xl font-bold text-innovation mb-2">{visitorCount}</div>
             <div className="text-sm text-muted-foreground">Daily Visitors</div>
           </div>
           <div className="text-center">

@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      articles: {
+        Row: {
+          article_type: string
+          category: string
+          content: string
+          created_at: string
+          id: string
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+          votes: number | null
+        }
+        Insert: {
+          article_type?: string
+          category?: string
+          content: string
+          created_at?: string
+          id?: string
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+          votes?: number | null
+        }
+        Update: {
+          article_type?: string
+          category?: string
+          content?: string
+          created_at?: string
+          id?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+          votes?: number | null
+        }
+        Relationships: []
+      }
       idea_analytics: {
         Row: {
           category: string
