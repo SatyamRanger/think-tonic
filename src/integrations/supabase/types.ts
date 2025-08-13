@@ -37,10 +37,13 @@ export type Database = {
       }
       ideas: {
         Row: {
+          benefit_realization: string | null
           category: string
           created_at: string
           description: string
           id: string
+          implementation_status: string
+          solution_implemented: string | null
           status: string
           title: string
           updated_at: string
@@ -48,10 +51,13 @@ export type Database = {
           votes: number | null
         }
         Insert: {
+          benefit_realization?: string | null
           category: string
           created_at?: string
           description: string
           id?: string
+          implementation_status?: string
+          solution_implemented?: string | null
           status?: string
           title: string
           updated_at?: string
@@ -59,10 +65,13 @@ export type Database = {
           votes?: number | null
         }
         Update: {
+          benefit_realization?: string | null
           category?: string
           created_at?: string
           description?: string
           id?: string
+          implementation_status?: string
+          solution_implemented?: string | null
           status?: string
           title?: string
           updated_at?: string

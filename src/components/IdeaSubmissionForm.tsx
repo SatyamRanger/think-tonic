@@ -31,6 +31,9 @@ const IdeaSubmissionForm = ({ onClose, onBrainstorm }: IdeaSubmissionFormProps) 
     title: "",
     description: "",
     category: "",
+    implementationStatus: "new_proposal",
+    solutionImplemented: "",
+    benefitRealization: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -69,6 +72,9 @@ const IdeaSubmissionForm = ({ onClose, onBrainstorm }: IdeaSubmissionFormProps) 
           title: formData.title,
           description: formData.description,
           category: formData.category,
+          implementation_status: formData.implementationStatus,
+          solution_implemented: formData.solutionImplemented || null,
+          benefit_realization: formData.benefitRealization || null,
         });
 
       if (ideaError) throw ideaError;
@@ -190,6 +196,52 @@ const IdeaSubmissionForm = ({ onClose, onBrainstorm }: IdeaSubmissionFormProps) 
                 ))}
               </Tabs>
             </div>
+
+            {/* Implementation Status */}
+            <div className="space-y-4">
+              <Label>Implementation Status *</Label>
+              <Select 
+                value={formData.implementationStatus} 
+                onValueChange={(value) => setFormData({ ...formData, implementationStatus: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select implementation status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="new_proposal">New Idea Proposal</SelectItem>
+                  <SelectItem value="already_implemented">Already Implemented</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Conditional Fields for Already Implemented */}
+            {formData.implementationStatus === "already_implemented" && (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="solutionImplemented">Solution Implemented *</Label>
+                  <Textarea
+                    id="solutionImplemented"
+                    value={formData.solutionImplemented}
+                    onChange={(e) => setFormData({ ...formData, solutionImplemented: e.target.value })}
+                    required={formData.implementationStatus === "already_implemented"}
+                    placeholder="Describe the solution that was implemented in detail"
+                    rows={3}
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="benefitRealization">Benefit Realization *</Label>
+                  <Textarea
+                    id="benefitRealization"
+                    value={formData.benefitRealization}
+                    onChange={(e) => setFormData({ ...formData, benefitRealization: e.target.value })}
+                    required={formData.implementationStatus === "already_implemented"}
+                    placeholder="Describe the benefits realized from this implementation (e.g., cost savings, efficiency gains, time reduction)"
+                    rows={3}
+                  />
+                </div>
+              </div>
+            )}
 
             {/* Submit Buttons */}
             <div className="flex gap-4 pt-6">
