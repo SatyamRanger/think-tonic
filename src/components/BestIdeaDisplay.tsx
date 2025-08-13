@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Star, Trophy, Calendar, User, ThumbsUp } from "lucide-react";
+import { Star, Trophy, Calendar, User, ThumbsUp, Mail, Share } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -114,6 +114,26 @@ const BestIdeaDisplay = () => {
     });
   };
 
+  const shareIdeaByEmail = (idea: BestIdea) => {
+    const subject = encodeURIComponent(`Check out this innovative idea: ${idea.title}`);
+    const body = encodeURIComponent(
+      `I thought you'd be interested in this idea:\n\n` +
+      `Title: ${idea.title}\n` +
+      `Category: ${getCategoryLabel(idea.category)}\n` +
+      `Description: ${idea.description}\n` +
+      `Votes: ${idea.votes}\n` +
+      `Submitted by: ${idea.users?.name || 'Anonymous'}\n\n` +
+      `This idea was shared from our innovation platform!`
+    );
+    
+    window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
+    
+    toast({
+      title: "Email Sharing",
+      description: "Email client opened with the idea details.",
+    });
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -165,16 +185,30 @@ const BestIdeaDisplay = () => {
                 </p>
               </div>
               
-              <div className="pt-4 border-t space-y-2">
-                {bestIdea.users && (
+              <div className="pt-4 border-t space-y-4">
+                <div className="space-y-2">
+                  {bestIdea.users && (
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <User className="w-4 h-4" />
+                      <span>Submitted by: {bestIdea.users.name}</span>
+                    </div>
+                  )}
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <User className="w-4 h-4" />
-                    <span>Submitted by: {bestIdea.users.name}</span>
+                    <Calendar className="w-4 h-4" />
+                    <span>Created: {formatDate(bestIdea.created_at)}</span>
                   </div>
-                )}
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Calendar className="w-4 h-4" />
-                  <span>Created: {formatDate(bestIdea.created_at)}</span>
+                </div>
+                
+                <div className="flex justify-end">
+                  <Button
+                    onClick={() => shareIdeaByEmail(bestIdea)}
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-2"
+                  >
+                    <Mail className="w-4 h-4" />
+                    Share by Email
+                  </Button>
                 </div>
               </div>
             </CardContent>

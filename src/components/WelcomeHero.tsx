@@ -54,13 +54,22 @@ const WelcomeHero = ({ onGetStarted }: WelcomeHeroProps) => {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
-          <Button 
-            onClick={onGetStarted}
-            size="lg"
-            className="px-8 py-4 text-lg font-semibold bg-gradient-to-r from-primary to-innovation hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 transform hover:scale-105"
-          >
-            Submit Your Idea
-          </Button>
+          <div className="relative">
+            <Button 
+              onClick={onGetStarted}
+              size="lg"
+              className="px-8 py-4 text-lg font-semibold bg-gradient-to-r from-primary to-innovation hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 transform hover:scale-105"
+            >
+              Submit Your Idea
+            </Button>
+            {/* Animated motivational emoji */}
+            <div className="absolute -top-2 -right-2 animate-bounce">
+              <span className="text-2xl animate-pulse">💡</span>
+            </div>
+            <div className="absolute -top-1 -left-2 animate-ping">
+              <span className="text-lg">✨</span>
+            </div>
+          </div>
           
           <BestIdeaDisplay />
           
