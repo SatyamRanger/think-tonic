@@ -202,21 +202,16 @@ const AnalyticsDashboard = () => {
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={ideaData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ label, percent }) => `${label} ${(percent * 100).toFixed(0)}%`}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="count"
-                >
-                  {ideaData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
+              <BarChart data={ideaData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                <XAxis 
+                  dataKey="label" 
+                  className="text-muted-foreground"
+                  angle={-45}
+                  textAnchor="end"
+                  height={100}
+                />
+                <YAxis className="text-muted-foreground" />
                 <Tooltip 
                   contentStyle={{ 
                     backgroundColor: 'hsl(var(--card))', 
@@ -224,7 +219,12 @@ const AnalyticsDashboard = () => {
                     borderRadius: '8px'
                   }} 
                 />
-              </PieChart>
+                <Bar 
+                  dataKey="count" 
+                  fill="hsl(var(--innovation))"
+                  radius={[4, 4, 0, 0]}
+                />
+              </BarChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
